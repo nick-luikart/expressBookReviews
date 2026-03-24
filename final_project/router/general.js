@@ -18,13 +18,19 @@ public_users.get('/',function (req, res) {
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
     isbn = req.params.isbn;
-    res.send(books[isbn]);
+    res.send(JSON.stringify(books[isbn],null,4));
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    author = req.params.author;
+    let authors_books = {};
+    for(i = 1; i <= books.length; i++) {
+        if (books[i].author == author) {
+            authors_books.push(books[i]);
+        }
+    }
+    res.send(JSON.stringify(authors_books,null,4));
 });
 
 // Get all books based on title
