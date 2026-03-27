@@ -6,8 +6,18 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let username = req.query.username;
+    let password = req.query.password;
+
+    if (username !== null && password !== null) {
+        if (users.includes(username, 0) == false) {
+            // add to users array
+        } else {
+            // error message: username already exists
+        }
+    } else {
+        // error message: no username or password entered
+    }
 });
 
 // Get the book list available in the shop
@@ -17,15 +27,15 @@ public_users.get('/',function (req, res) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-    isbn = req.params.isbn;
+    let isbn = req.params.isbn;
     res.send(JSON.stringify(books[isbn],null,4));
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-    author = req.params.author;
+    let author = req.params.author;
     let authors_books = {};
-    for(i = 1; i <= books.length; i++) {
+    for(let i = 1; i <= books.length; i++) {
         if (books[i].author == author) {
             authors_books.push(books[i]);
         }
@@ -35,14 +45,20 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let title = req.params.title;
+    let title_books = {};
+    for (let i = 1; i <= books.length; i++) {
+        if (books[i].title == title) {
+            title_books.push(books[i]);
+        }
+    }
+    res.send(JSON.stringify(title_books,null,4));
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let isbn = req.params.isbn;
+    res.send(JSON.stringify(books[isbn].reviews,null,4));
 });
 
 module.exports.general = public_users;
