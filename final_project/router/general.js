@@ -10,13 +10,22 @@ public_users.post("/register", (req,res) => {
     let password = req.query.password;
 
     if (username !== null && password !== null) {
-        if (users.includes(username, 0) == false) {
-            // add to users array
+        let username_not_used = true;
+        if(users.length > 0) {
+            for (let i = 0; i <= users.length; i++) {
+                if (users[i].username === username) {
+                    username_not_used = false;
+                }
+            }
+        }
+        if (username_not_used) {
+            users.push({"username": username, "password": password});
+            res.send("New user:" + username + "added.");
         } else {
-            // error message: username already exists
+            return res.status(403).json({ message: "Username is unavailable." });
         }
     } else {
-        // error message: no username or password entered
+        return res.status(403).json({ message: "Username or password not entered. "});
     }
 });
 
@@ -34,8 +43,8 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
     let author = req.params.author;
-    let authors_books = {};
-    for(let i = 1; i <= books.length; i++) {
+    const authors_books = [];
+    for (let i in books) {
         if (books[i].author == author) {
             authors_books.push(books[i]);
         }
@@ -46,8 +55,8 @@ public_users.get('/author/:author',function (req, res) {
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
     let title = req.params.title;
-    let title_books = {};
-    for (let i = 1; i <= books.length; i++) {
+    const title_books = [];
+    for (let i in books) {
         if (books[i].title == title) {
             title_books.push(books[i]);
         }
