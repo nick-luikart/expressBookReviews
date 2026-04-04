@@ -19,8 +19,11 @@ public_users.post("/register", (req,res) => {
             }
         }
         if (username_not_used) {
-            users.push({"username": username, "password": password});
-            res.send("New user:" + username + "added.");
+            users.push({
+                "username": req.query.username,
+                "password": req.query.password
+            });
+            res.send("New user: " + req.query.username + " added.");
         } else {
             return res.status(403).json({ message: "Username is unavailable." });
         }
