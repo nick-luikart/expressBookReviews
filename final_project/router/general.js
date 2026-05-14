@@ -6,8 +6,8 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-    let username = req.query.username;
-    let password = req.query.password;
+    let username = req.body.username;
+    let password = req.body.password;
 
     if (username !== null && password !== null) {
         let username_not_used = true;
@@ -20,10 +20,11 @@ public_users.post("/register", (req,res) => {
         }
         if (username_not_used) {
             users.push({
-                "username": req.query.username,
-                "password": req.query.password
+                "username": username,
+                "password": password
             });
-            res.send("New user: " + req.query.username + " added.");
+            res.send("New user: " + username + " added.");
+            console.log("users contents: " + users);
         } else {
             return res.status(403).json({ message: "Username is unavailable." });
         }

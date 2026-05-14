@@ -13,12 +13,16 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
     let valid_user = users.filter((user) => {
         if (user.username === username && user.password === password) {
+            console.log("user is: " + user);
+            console.log("password entered is: " + password);
             return user;
         }
     });
     if (valid_user.length > 0) {
+        console.log("User is valid.");
         return true;
     } else {
+        console.log("User is not valid.");
         return false;
     }
 }
@@ -28,6 +32,8 @@ regd_users.post("/login", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
 
+    console.log("username entered is: " + username);
+    console.log("password entered is: " + password);
     if (!username || !password) {
         return res.status(404).json({ message: "error logging in "});
     }
