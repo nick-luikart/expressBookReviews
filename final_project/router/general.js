@@ -24,7 +24,6 @@ public_users.post("/register", (req,res) => {
                 "password": password
             });
             res.send("New user: " + username + " added.");
-            console.log("users contents: " + users);
         } else {
             return res.status(403).json({ message: "Username is unavailable." });
         }
