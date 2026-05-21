@@ -34,7 +34,7 @@ regd_users.post("/login", (req,res) => {
 
     if (authenticatedUser(username, password)) {
         let accessToken = jwt.sign({
-            data: password
+            data: username
         }, 'access', { expiresIn: 60 * 60 });
 
         req.session.authorization = {
@@ -50,8 +50,31 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
     let book_to_review = books[req.params.isbn - 1];
     // get session and username stored in session
+    let user = req.user;
     // check if user has posted a review on specified book
+    let user_has_review = false;
+    let review_to_update;
+    if (book_to_review.reviews.length > 0) {
+        for (let i in book_to_review.reviews) {
+            if(book_to_review.reviews[i].username === user) {
+                user_has_review = true;
+                review_to_update = book_to_review.reviews[i];
+                break;
+            }
+        }
+    }
     // add or modify review data on specified book
+    if (!user_has_review) {
+        let new_review = {
+            username: user,
+            review: req.query.review
+        }
+        book_to_review.reviews.push(new_review);
+        return res.status(200).send("User " + user + " review for book " + book_to_review.title + " successfully added.");
+    } else {
+        review_to_update.review = req.query.review;
+        return res.status(200).send("User " + user + " review for book " + book_to_review.title + " successfully updated.");
+    }
 });
 
 // Delete a book review
