@@ -28,17 +28,18 @@ regd_users.post("/login", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    if (!username || !password) {
+    if (!req.body.username || !req.body.password) {
         return res.status(404).json({ message: "error logging in "});
     }
 
     if (authenticatedUser(username, password)) {
         let accessToken = jwt.sign({
-            data: username
-        }, 'access', { expiresIn: 60 * 60 });
+            data: password
+        }, 'access', { expiresIn: '24h' });
 
         req.session.authorization = {
-            accessToken, username
+            accessToken: accessToken,
+            user: username
         }
         return res.status(200).send("User successfully logged in");
     } else {
