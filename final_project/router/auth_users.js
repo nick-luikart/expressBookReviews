@@ -34,12 +34,12 @@ regd_users.post("/login", (req,res) => {
 
     if (authenticatedUser(username, password)) {
         let accessToken = jwt.sign({
-            data: password
+            data: username
         }, 'access', { expiresIn: '24h' });
 
         req.session.authorization = {
-            accessToken: accessToken,
-            user: username
+            accessToken,
+            username
         }
         return res.status(200).send("User successfully logged in");
     } else {
@@ -51,7 +51,7 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
     let book_to_review = books[req.params.isbn - 1];
     // get session and username stored in session
-    let user = req.user;
+    let user = req.user.data;
     // check if user has posted a review on specified book
     let user_has_review = false;
     let review_to_update;
