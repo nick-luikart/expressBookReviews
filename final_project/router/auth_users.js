@@ -49,7 +49,7 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-    let book_to_review = books[req.params.isbn - 1];
+    let book_to_review = books[req.params.isbn];
     // get session and username stored in session
     let user = req.user.data;
     // check if user has posted a review on specified book
@@ -68,12 +68,12 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     if (!user_has_review) {
         let new_review = {
             username: user,
-            review: req.query.review
+            review: req.body.review
         }
-        book_to_review.reviews.push(new_review);
+        book_to_review.reviews[new_review.username] = new_review;
         return res.status(200).send("User " + user + " review for book " + book_to_review.title + " successfully added.");
     } else {
-        review_to_update.review = req.query.review;
+        review_to_update.review = req.body.review;
         return res.status(200).send("User " + user + " review for book " + book_to_review.title + " successfully updated.");
     }
 });
